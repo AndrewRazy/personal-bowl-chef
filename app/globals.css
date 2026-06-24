@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @theme {
+  --font-pixel: "VT323", monospace;
   --color-brand-50: #f0fdf4;
   --color-brand-100: #dcfce7;
   --color-brand-200: #bbf7d0;
@@ -15,6 +16,15 @@
 
 :root {
   color-scheme: light;
+}
+
+/* 8-bit pixel font applied globally */
+body {
+  font-family: "VT323", monospace;
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+  image-rendering: pixelated;
 }
 
 body {

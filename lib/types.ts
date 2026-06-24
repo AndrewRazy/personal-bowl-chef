@@ -13,6 +13,8 @@ export type Ingredient = {
   name: string;
   category: IngredientCategory;
   icon: string;
+  /** Path to an 8-bit pixel-art sprite shown inside the bowl. Falls back to `icon` emoji if absent. */
+  sprite?: string;
   tags: string[];
 };
 
@@ -23,6 +25,11 @@ export type DietaryPref =
   | "high-protein"
   | "dairy-free"
   | "gluten-free";
+
+export type BowlPicture = {
+  id: string;
+  url: string;
+}
 
 export type BowlIngredient = {
   ingredientId: string;
