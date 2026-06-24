@@ -29,9 +29,12 @@ body {
 
 body {
   background:
-    radial-gradient(1200px 600px at 100% -10%, var(--color-brand-100), transparent),
-    radial-gradient(900px 500px at -10% 110%, #fef9c3, transparent),
-    #f8fafc;
+    linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
+    url("/kitchen-bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   min-height: 100vh;
 }
 
