@@ -1,6 +1,9 @@
 "use client";
 
+import { ChefHat, Leaf, TriangleAlert } from "lucide-react";
 import type { Recipe } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 type Props = {
   recipe: Recipe;
@@ -9,9 +12,9 @@ type Props = {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl bg-slate-50 px-3 py-2 text-center">
-      <p className="text-sm font-semibold text-slate-800">{value}</p>
-      <p className="text-xs text-slate-400">{label}</p>
+    <div className="rounded-lg bg-muted px-3 py-2 text-center">
+      <p className="text-sm font-semibold text-foreground">{value}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
     </div>
   );
 }
@@ -22,8 +25,8 @@ export function RecipeCard({ recipe, onStartCooking }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">{recipe.title}</h2>
-        <p className="mt-1 text-sm text-slate-600">{recipe.description}</p>
+        <h2 className="text-2xl font-bold text-foreground">{recipe.title}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{recipe.description}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -33,30 +36,37 @@ export function RecipeCard({ recipe, onStartCooking }: Props) {
         <Stat label="Fiber" value={`${recipe.nutritionEstimate.fiber_g} g`} />
       </div>
 
-      <div className="rounded-xl border border-brand-100 bg-brand-50 p-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
+      <div className="rounded-lg border border-primary/20 bg-primary/5 p-4">
+        <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
+          <Leaf className="size-3.5" />
           Why it&apos;s healthy
         </p>
-        <p className="mt-1 text-sm text-brand-900">{recipe.healthNotes}</p>
+        <p className="mt-1 text-sm text-foreground">{recipe.healthNotes}</p>
       </div>
 
       <div>
-        <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500">
+        <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Ingredients
         </h3>
         <ul className="space-y-1.5">
           {recipe.ingredients.map((item, index) => (
-            <li key={index} className="flex justify-between gap-4 text-sm">
-              <span className="text-slate-700">{item.name}</span>
-              <span className="text-slate-400">{item.amount}</span>
+            <li key={index}>
+              <div className="flex justify-between gap-4 text-sm">
+                <span className="text-foreground">{item.name}</span>
+                <span className="text-muted-foreground">{item.amount}</span>
+              </div>
+              {index < recipe.ingredients.length - 1 && (
+                <Separator className="mt-1.5" />
+              )}
             </li>
           ))}
         </ul>
       </div>
 
       {recipe.warnings && recipe.warnings.length > 0 && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-amber-700">
+            <TriangleAlert className="size-3.5" />
             Food safety
           </p>
           <ul className="mt-1 list-inside list-disc text-sm text-amber-900">
@@ -67,12 +77,10 @@ export function RecipeCard({ recipe, onStartCooking }: Props) {
         </div>
       )}
 
-      <button
-        onClick={onStartCooking}
-        className="w-full rounded-xl bg-brand-600 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
-      >
+      <Button onClick={onStartCooking} size="lg" className="w-full">
+        <ChefHat />
         Start cooking · {recipe.steps.length} steps
-      </button>
+      </Button>
     </div>
   );
 }
