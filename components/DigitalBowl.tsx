@@ -4,6 +4,8 @@ import { useDroppable } from "@dnd-kit/core";
 import type { Ingredient } from "@/lib/types";
 import { BowlIngredient } from "./BowlIngredient";
 import { BOWL_PICTURES } from "@/data/bowlPictures";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 type Props = {
   ingredients: Ingredient[];
@@ -20,26 +22,26 @@ export function DigitalBowl({ ingredients, servings, isGenerating, onRemove }: P
 
   return (
     <div className="flex h-full flex-col items-center justify-center">
-      <div
+      <Card
         ref={setNodeRef}
-        className={`relative flex w-full max-w-xl flex-col items-center justify-end rounded-[3rem] border-4 border-b-[10px] bg-gradient-to-b from-white to-slate-50 px-6 pb-6 pt-10 transition
-          ${isOver ? "border-brand-400 shadow-[0_0_0_6px_rgba(34,197,94,0.15)]" : "border-slate-200"}
-          ${isGenerating ? "animate-pulse" : ""}`}
+        className={cn(
+          "relative w-full max-w-xl items-center justify-end gap-0 rounded-3xl border-2 bg-card/80 px-6 pt-10 pb-6 backdrop-blur transition",
+          isOver
+            ? "border-primary ring-4 ring-primary/15"
+            : "border-border",
+          isGenerating && "animate-pulse"
+        )}
         style={{ minHeight: "24rem" }}
       >
-        <div className="pointer-events-none absolute inset-x-10 top-6 h-6 rounded-full bg-white/60 blur-sm" />
-
-        {/* Bowl illustration as the base layer */}
         <div className="relative flex w-full items-end justify-center">
           <img
             src={BOWL_IMG}
             alt="bowl"
-            className={`h-72 w-72 object-contain ${isEmpty ? "animate-float" : ""}`}
+            className={cn("h-72 w-72 object-contain", isEmpty && "animate-float")}
             draggable={false}
             aria-hidden
           />
 
-          {/* Selected ingredients layered inside the bowl opening */}
           {!isEmpty && (
             <div className="absolute inset-x-6 top-2 bottom-[38%] flex flex-wrap content-start items-center justify-center gap-1 overflow-visible">
               {ingredients.map((ingredient) => (
@@ -54,14 +56,14 @@ export function DigitalBowl({ ingredients, servings, isGenerating, onRemove }: P
         </div>
 
         {isEmpty && (
-          <p className="mt-2 max-w-xs text-center text-sm text-slate-400">
+          <p className="mt-2 max-w-xs text-center text-sm text-muted-foreground">
             Drag ingredients here to fill your bowl, then let the AI chef cook up
             a recipe.
           </p>
         )}
-      </div>
+      </Card>
 
-      <p className="mt-4 text-sm font-medium text-slate-500">
+      <p className="mt-4 text-sm font-medium text-muted-foreground">
         {ingredients.length}{" "}
         {ingredients.length === 1 ? "ingredient" : "ingredients"} ·{" "}
         {servings} {servings === 1 ? "serving" : "servings"}

@@ -1,6 +1,10 @@
 "use client";
 
 import type { DietaryPref } from "@/lib/types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
 
 const DIETARY_OPTIONS: { value: DietaryPref; label: string }[] = [
   { value: "vegetarian", label: "Vegetarian" },
@@ -29,64 +33,65 @@ export function PreferencesPanel({
   onMaxPrepChange,
 }: Props) {
   return (
-    <div className="space-y-5 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur">
-      <div>
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700">Servings</label>
-          <span className="text-sm font-semibold text-brand-600">{servings}</span>
+    <Card className="gap-5 bg-card/80 py-5 backdrop-blur">
+      <CardHeader>
+        <CardTitle className="text-base">Preferences</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-5">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label>Servings</Label>
+            <span className="text-sm font-semibold text-primary">{servings}</span>
+          </div>
+          <Slider
+            min={1}
+            max={6}
+            step={1}
+            value={[servings]}
+            onValueChange={(values) => onServingsChange(values[0])}
+          />
         </div>
-        <input
-          type="range"
-          min={1}
-          max={6}
-          value={servings}
-          onChange={(event) => onServingsChange(Number(event.target.value))}
-          className="mt-2 w-full accent-brand-500"
-        />
-      </div>
 
-      <div>
-        <span className="text-sm font-medium text-slate-700">Dietary preferences</span>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {DIETARY_OPTIONS.map((option) => {
-            const active = dietaryPrefs.includes(option.value);
-            return (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => onTogglePref(option.value)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition
-                  ${active
-                    ? "border-brand-500 bg-brand-500 text-white shadow-sm"
-                    : "border-slate-200 bg-white text-slate-600 hover:border-brand-300"}`}
-              >
-                {option.label}
-              </button>
-            );
-          })}
+        <div className="space-y-2">
+          <Label>Dietary preferences</Label>
+          <div className="flex flex-wrap gap-2">
+            {DIETARY_OPTIONS.map((option) => {
+              const active = dietaryPrefs.includes(option.value);
+              return (
+                <Button
+                  key={option.value}
+                  type="button"
+                  size="sm"
+                  variant={active ? "default" : "outline"}
+                  onClick={() => onTogglePref(option.value)}
+                  className="h-8 rounded-full px-3 text-xs"
+                >
+                  {option.label}
+                </Button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <div>
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-slate-700">Max total time</label>
-          <span className="text-sm font-semibold text-brand-600">
-            {maxPrepMinutes ? `${maxPrepMinutes} min` : "Any"}
-          </span>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label>Max total time</Label>
+            <span className="text-sm font-semibold text-primary">
+              {maxPrepMinutes ? `${maxPrepMinutes} min` : "Any"}
+            </span>
+          </div>
+          <Slider
+            min={0}
+            max={90}
+            step={15}
+            value={[maxPrepMinutes ?? 0]}
+            onValueChange={(values) => {
+              const value = values[0];
+              onMaxPrepChange(value === 0 ? undefined : value);
+            }}
+          />
         </div>
-        <input
-          type="range"
-          min={0}
-          max={90}
-          step={15}
-          value={maxPrepMinutes ?? 0}
-          onChange={(event) => {
-            const value = Number(event.target.value);
-            onMaxPrepChange(value === 0 ? undefined : value);
-          }}
-          className="mt-2 w-full accent-brand-500"
-        />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

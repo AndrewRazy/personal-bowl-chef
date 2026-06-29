@@ -11,6 +11,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
+import { Loader2 } from "lucide-react";
 import { getIngredientById } from "@/lib/ingredients";
 import type { DietaryPref, Ingredient, Recipe } from "@/lib/types";
 import { IngredientPalette } from "@/components/IngredientPalette";
@@ -21,6 +22,8 @@ import { GenerateButton } from "@/components/GenerateButton";
 import { RecipeCard } from "@/components/RecipeCard";
 import { CookingMode } from "@/components/CookingMode";
 import { OllamaStatus } from "@/components/OllamaStatus";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 
 type View = "idle" | "generating" | "recipe" | "cooking";
 
@@ -119,12 +122,12 @@ export default function Home() {
       onDragEnd={handleDragEnd}
     >
       <div className="mx-auto flex min-h-screen max-w-7xl flex-col px-4 py-6">
-        <header className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <header className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/80 px-4 py-3 shadow-sm backdrop-blur">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               🥣 Bowl Chef
             </h1>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-muted-foreground">
               Drag ingredients into the bowl and cook with a local AI chef.
             </p>
           </div>
@@ -153,21 +156,25 @@ export default function Home() {
             />
             {bowlIds.length > 0 && (
               <div className="text-center">
-                <button
+                <Button
+                  variant="link"
+                  size="sm"
                   onClick={clearBowl}
-                  className="text-xs font-medium text-slate-400 underline-offset-2 hover:text-slate-600 hover:underline"
+                  className="text-muted-foreground"
                 >
                   Empty the bowl
-                </button>
+                </Button>
               </div>
             )}
           </div>
 
           <aside className="space-y-4">
             {view === "cooking" && recipe ? (
-              <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur lg:h-[calc(100vh-8rem)]">
-                <CookingMode recipe={recipe} onExit={() => setView("recipe")} />
-              </div>
+              <Card className="bg-card/80 py-4 backdrop-blur lg:h-[calc(100vh-8rem)]">
+                <CardContent>
+                  <CookingMode recipe={recipe} onExit={() => setView("recipe")} />
+                </CardContent>
+              </Card>
             ) : (
               <>
                 <PreferencesPanel
@@ -180,30 +187,36 @@ export default function Home() {
                 />
 
                 {error && (
-                  <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+                  <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
                     {error}
                   </div>
                 )}
 
                 {isGenerating && (
-                  <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white/80 p-8 text-center shadow-sm">
-                    <span className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600" />
-                    <p className="text-sm text-slate-500">
-                      The AI chef is tasting and balancing your ingredients…
-                    </p>
-                  </div>
+                  <Card className="bg-card/80 backdrop-blur">
+                    <CardContent className="flex flex-col items-center gap-3 text-center">
+                      <Loader2 className="size-8 animate-spin text-primary" />
+                      <p className="text-sm text-muted-foreground">
+                        The AI chef is tasting and balancing your ingredients…
+                      </p>
+                    </CardContent>
+                  </Card>
                 )}
 
                 {view === "recipe" && recipe && (
-                  <div className="rounded-2xl border border-slate-200 bg-white/90 p-5 shadow-sm">
-                    <RecipeCard recipe={recipe} onStartCooking={() => setView("cooking")} />
-                  </div>
+                  <Card className="bg-card/90 py-5 backdrop-blur">
+                    <CardContent>
+                      <RecipeCard recipe={recipe} onStartCooking={() => setView("cooking")} />
+                    </CardContent>
+                  </Card>
                 )}
 
                 {view === "idle" && !error && (
-                  <div className="rounded-2xl border border-dashed border-slate-200 bg-white/50 p-6 text-center text-sm text-slate-400">
-                    Your recipe will appear here once you create it.
-                  </div>
+                  <Card className="border-dashed bg-card/50">
+                    <CardContent className="text-center text-sm text-muted-foreground">
+                      Your recipe will appear here once you create it.
+                    </CardContent>
+                  </Card>
                 )}
               </>
             )}

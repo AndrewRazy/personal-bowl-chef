@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { HealthStatus } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export function OllamaStatus() {
   const [status, setStatus] = useState<HealthStatus | null>(null);
@@ -45,20 +47,21 @@ export function OllamaStatus() {
       : "Ollama offline";
 
   const tone = !status
-    ? "bg-slate-300"
+    ? "bg-muted-foreground/40"
     : connected
       ? modelMissing
         ? "bg-amber-400"
-        : "bg-brand-500"
-      : "bg-rose-500";
+        : "bg-primary"
+      : "bg-destructive";
 
   return (
-    <span
-      className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm"
+    <Badge
+      variant="outline"
+      className="gap-2 bg-card/80 py-1.5 text-muted-foreground font-medium backdrop-blur"
       title={status?.error ?? label}
     >
-      <span className={`h-2 w-2 rounded-full ${tone} ${connected ? "" : "animate-pulse"}`} />
+      <span className={cn("size-2 rounded-full", tone, !connected && "animate-pulse")} />
       {label}
-    </span>
+    </Badge>
   );
 }
