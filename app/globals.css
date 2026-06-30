@@ -88,9 +88,7 @@ body {
   letter-spacing: 0.03em;
   image-rendering: pixelated;
   color: var(--foreground);
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)),
-    url("/kitchen-bg.png");
+  background: url("/kitchen-bg.png");
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;
